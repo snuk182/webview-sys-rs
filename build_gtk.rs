@@ -16,6 +16,5 @@ pub fn main() {
 
     let mut config = cmake::Config::new("sys/webview");
     config.no_build_target(true);
-    config.no_build_target(true).no_build_target(true);
     config.build();
 }
