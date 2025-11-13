@@ -24,6 +24,7 @@ cocoa = []
 default = []
 
 [build-dependencies]
+# no-build-target does not apply on vanilla
 cmake = { version = "^0.1", git = "https://github.com/snuk182/cmake-rs" }
 cc = { version = "~1.1", optional = true }
 embed-resource = { version = "~1.3", optional = true }
