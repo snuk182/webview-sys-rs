@@ -17,6 +17,8 @@ pub fn main() {
     config.define("WEBVIEW_BUILD_STATIC_LIBRARY", "true");
     config.define("WEBVIEW_IS_TOP_LEVEL_BUILD", "false");
     config.define("WEBVIEW_EDGE", "true");
+    config.define("CMAKE_CXX_STANDARD", "11");
+    config.cxxflag("/EHsc");
 
     if cfg!(debug_assertions) {
         config.define("CMAKE_BUILD_TYPE", "Debug");
@@ -27,5 +29,9 @@ pub fn main() {
 
     let mut config = cmake::Config::new("sys\\webview");
     config.no_build_target(true);
-    config.build();
+    config.cxxflag("/EHsc");
+    let dst = config.build();
+
+    println!("cargo:rustc-link-search=native={}/build/core/{}", dst.display(), if cfg!(debug_assertions) { "Debug" } else { "Release" });
+    println!("cargo:rustc-link-lib=static=webview_staticd");
 }
