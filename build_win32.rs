@@ -19,19 +19,23 @@ pub fn main() {
     config.define("WEBVIEW_EDGE", "true");
     config.define("CMAKE_CXX_STANDARD", "11");
     config.cxxflag("/EHsc");
-
-    if cfg!(debug_assertions) {
-        config.define("CMAKE_BUILD_TYPE", "Debug");
-    } else {
-        config.define("CMAKE_BUILD_TYPE", "Release");
-    }
+    config.static_crt(true);
     config.build();
 
     let mut config = cmake::Config::new("sys\\webview");
     config.no_build_target(true);
     config.cxxflag("/EHsc");
+    if cfg!(debug_assertions) {
+        config.define("CMAKE_BUILD_TYPE", "Debug");
+    } else {
+        config.define("CMAKE_BUILD_TYPE", "Release");
+    }
+    config.static_crt(true);
     let dst = config.build();
 
     println!("cargo:rustc-link-search=native={}/build/core/{}", dst.display(), if cfg!(debug_assertions) { "Debug" } else { "Release" });
     println!("cargo:rustc-link-lib=static=webview_staticd");
+    if cfg!(debug_assertions) {
+        println!("cargo::rustc-link-lib=dylib=msvcrtd");
+    }
 }
